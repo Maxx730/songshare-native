@@ -2,7 +2,7 @@ import React from 'react';
 import { View,Text,StyleSheet,TouchableOpacity } from 'react-native';
 import Colors from '../styles/Colors';
 import Constants from '../styles/Constants';
-import { AntDesign } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 const Styles = StyleSheet.create({
   SsButton: {
@@ -45,27 +45,31 @@ const Styles = StyleSheet.create({
   },
   Icon: {
     alignSelf: 'center'
+  },
+  Caps: {
+    textTransform: 'uppercase',
+    fontWeight: 'bold'
   }
 });
 
 class SsButton extends React.Component {
   render() {
     return(
-      <View style={[this.props.position && {flex: 1}]}>
+      <View style={[this.props.position && {flex: 1},{flex: 1}]}>
         <TouchableOpacity onPress={() => {
           if(this.props.position) {
             this.props.onPress(parseInt(this.props.buttonPosition));
           }
         }} style={[Styles.Default,this.props.link && Styles.Link,this.props.dashed && Styles.Dashed,this.props.primary && Styles.Primary,this.props.danger && Styles.Danger,Styles.SsButton,this.getPosition(this.props.position)]}>
           {
-            this.props.label && <Text style={[this.getTextColor(),{textAlign: 'center',fontSize: 15}]}>
+            this.props.label && <Text style={[this.getTextColor(),{textAlign: 'center',fontSize: 15},this.props.caps && Styles.Caps]}>
               {
                this.props.label
               }
             </Text>
           }
           {
-            this.props.icon && <AntDesign style={[Styles.Icon]} name={this.props.icon} size={20} color={this.getIconColor()}/>
+            this.props.icon && <FontAwesome style={[Styles.Icon]} name={this.props.icon} size={20} color={this.getIconColor()}/>
           }
         </TouchableOpacity>
       </View>
@@ -87,6 +91,9 @@ class SsButton extends React.Component {
   getIconColor() {
     if(this.props.primary || this.props.danger)
       return Colors.WHITE
+
+    if(this.props.link)
+      return Colors.PRIMARY
   }
 
   getPosition(position) {
