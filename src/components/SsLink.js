@@ -14,7 +14,9 @@ const Styles = StyleSheet.create({
 class SsLink extends React.Component {
   render() {
     return(
-      <TouchableOpacity style={[Styles.SsLink]}>
+      <TouchableOpacity style={[Styles.SsLink]} onPress={() => {
+        this.props.onPress && this.props.onPress();
+      }}>
         <Text style={[{color: this.getColor(),fontWeight: 'bold'},this.props.style && this.props.style]}>
           {
             this.props.label

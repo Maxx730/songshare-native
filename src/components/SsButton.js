@@ -49,19 +49,22 @@ const Styles = StyleSheet.create({
   Caps: {
     textTransform: 'uppercase',
     fontWeight: 'bold'
+  },
+  Disabled: {
+    opacity: .4
   }
 });
 
 class SsButton extends React.Component {
   render() {
     return(
-      <View style={[this.props.position && {flex: 1},{flex: 1}]}>
+      <View style={[this.props.position && {flex: 1},{flex: 1},this.props.disabled && Styles.Disabled]}>
         <TouchableOpacity onPress={() => {
           if(this.props.position) {
             this.props.onPress(parseInt(this.props.buttonPosition));
           }
 
-          this.props.onPress && this.props.onPress();
+          (this.props.onPress && !this.props.disabled) && this.props.onPress();
         }} style={[Styles.Default,this.props.link && Styles.Link,this.props.dashed && Styles.Dashed,this.props.primary && Styles.Primary,this.props.danger && Styles.Danger,this.props.style && this.props.style,Styles.SsButton,this.getPosition(this.props.position)]}>
           {
             this.props.label && <Text style={[this.getTextColor(),{textAlign: 'center',fontSize: 15},this.props.caps && Styles.Caps]}>

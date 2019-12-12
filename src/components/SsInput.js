@@ -44,7 +44,9 @@ class SsInput extends React.Component {
   render() {
     return(
       <View style={[Styles.SsInput,this.props.disabled && Styles.Disabled, this.props.dashed && Styles.Dashed]}>
-        <TextInput style={[Styles.InputText]} value={this.props.value} disabled={this.props.disabled ? true : false} placeholder={this.props.placeholder} secureTextEntry={(this.props.password && !this.state.showingPassword) ? true : false}/>
+        <TextInput style={[Styles.InputText]} onChangeText={(value) => {
+          this.props.onChange && this.props.onChange(value);
+        }} value={this.props.value} disabled={this.props.disabled ? true : false} placeholder={this.props.placeholder} secureTextEntry={(this.props.password && !this.state.showingPassword) ? true : false}/>
         {
           this.props.password ? <TouchableOpacity onPress={() => {
             this.setState({

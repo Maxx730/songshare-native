@@ -11,11 +11,13 @@ import SsCollapse from './src/components/SsCollapse';
 //Import the different app screens here.
 import Login from './src/views/Login';
 import Register from './src/views/Register';
+import Forgot from './src/views/Forgot';
 
 const MainNavigation = createStackNavigator({
   Login: {screen: Login},
-  Register: {screen: Register}
-})
+  Register: {screen: Register},
+  Forgot: {screen: Forgot}
+});
 
 const App = createAppContainer(MainNavigation);
 

@@ -41,11 +41,12 @@ class SsCheckbox extends React.Component {
 
   render() {
     return(
-      <View style={[Styles.SsCheckbox]}>
+      <View value={this.state.checked} style={[Styles.SsCheckbox]}>
         <TouchableOpacity style={[Styles.Checkbox,this.state.checked && Styles.Checked]} onPress={() => {
           this.setState({
             checked: !this.state.checked
           });
+          this.props.onChecked && this.props.onChecked(!this.state.checked);
         }}>
         {
           this.state.checked && <Feather name='check' color={Colors.WHITE} size={22}/>

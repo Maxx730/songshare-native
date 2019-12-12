@@ -57,7 +57,9 @@ class Login extends React.Component {
           <View style={[Styles.Form]}>
             <SsInput placeholder={Labels.USERNAME} icon='user'/>
             <SsInput placeholder={Labels.PASSWORD} password={true}/>
-            <TouchableOpacity style={[{
+            <TouchableOpacity onPress={() => {
+              navigate('Forgot');
+            }} style={[{
               paddingTop: Constants.tinyAmount,
               paddingBottom: Constants.largeAmount,
               paddingRight: Constants.mediumAmount
