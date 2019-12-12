@@ -60,7 +60,9 @@ class SsButton extends React.Component {
           if(this.props.position) {
             this.props.onPress(parseInt(this.props.buttonPosition));
           }
-        }} style={[Styles.Default,this.props.link && Styles.Link,this.props.dashed && Styles.Dashed,this.props.primary && Styles.Primary,this.props.danger && Styles.Danger,Styles.SsButton,this.getPosition(this.props.position)]}>
+
+          this.props.onPress && this.props.onPress();
+        }} style={[Styles.Default,this.props.link && Styles.Link,this.props.dashed && Styles.Dashed,this.props.primary && Styles.Primary,this.props.danger && Styles.Danger,this.props.style && this.props.style,Styles.SsButton,this.getPosition(this.props.position)]}>
           {
             this.props.label && <Text style={[this.getTextColor(),{textAlign: 'center',fontSize: 15},this.props.caps && Styles.Caps]}>
               {

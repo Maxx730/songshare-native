@@ -1,5 +1,5 @@
 import React from 'react';
-import { View,Text,StyleSheet,KeyboardAvoidingView } from 'react-native';
+import { View,Text,StyleSheet,KeyboardAvoidingView,TouchableOpacity,Image } from 'react-native';
 import Constants from '../styles/Constants';
 import Colors from '../styles/Colors';
 import Labels from '../styles/Labels';
@@ -8,16 +8,19 @@ import Labels from '../styles/Labels';
 import SsInput from '../components/SsInput';
 import SsButton from '../components/SsButton';
 import SsHeader from '../components/SsHeader';
+import SsButtonSet from '../components/SsButtonSet';
+import SsCheckbox from '../components/SsCheckbox';
 
 const Styles = StyleSheet.create({
   Login: {
     flex: 1
   },
   Header: {
-    flex: 3,
+    flex: 2.5,
     backgroundColor: Colors.PRIMARY,
     alignContent: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    overflow: 'hidden'
   },
   Form: {
     padding: Constants.largeAmount,
@@ -36,9 +39,14 @@ class Login extends React.Component {
   }
 
   render() {
+      const {navigate} = this.props.navigation;
       return(
         <KeyboardAvoidingView style={[Styles.Login]} behavior='padding'>
           <View style={[Styles.Header]}>
+            <Image source={require('../../assets/img/djbooth.jpg')} style={{
+              opacity: .3,
+              position: 'absolute'
+            }}/>
             <SsHeader light style={{textAlign: 'center'}}>
               {Labels.HELLO}
             </SsHeader>
@@ -49,19 +57,24 @@ class Login extends React.Component {
           <View style={[Styles.Form]}>
             <SsInput placeholder={Labels.USERNAME} icon='user'/>
             <SsInput placeholder={Labels.PASSWORD} password={true}/>
-            <SsButton label={Labels.FORGOT} link/>
+            <TouchableOpacity style={[{
+              paddingTop: Constants.tinyAmount,
+              paddingBottom: Constants.largeAmount,
+              paddingRight: Constants.mediumAmount
+            }]}>
+              <Text style={[{
+                textAlign: 'right',
+                fontWeight: 'bold'
+              }]}>
+                {Labels.FORGOT}
+              </Text>
+            </TouchableOpacity>
             <SsButton label={Labels.SIGN_IN} primary caps/>
-
-            <View style={{paddingTop: Constants.largeAmount}}>
-              <View style={[Styles.SocialLogins]}>
-                <SsButton icon='google' link/>
-                <SsButton icon='facebook' link/>
-                <SsButton icon='twitter' link/>
-              </View>
-            </View>
           </View>
           <View style={[{flex: .5}]}>
-            <SsButton label={Labels.NO_ACCOUNT} link/>
+            <SsButton label={Labels.NO_ACCOUNT} link onPress={() => {
+              navigate('Register');
+            }}/>
           </View>
         </KeyboardAvoidingView>
       );

@@ -44,16 +44,22 @@ class SsInput extends React.Component {
   render() {
     return(
       <View style={[Styles.SsInput,this.props.disabled && Styles.Disabled, this.props.dashed && Styles.Dashed]}>
-        <TextInput style={[Styles.InputText]} value={this.props.value} disabled={this.props.disabled ? true : false} placeholder={this.props.placeholder} secureTextEntry={this.props.password ? true : false}/>
+        <TextInput style={[Styles.InputText]} value={this.props.value} disabled={this.props.disabled ? true : false} placeholder={this.props.placeholder} secureTextEntry={(this.props.password && !this.state.showingPassword) ? true : false}/>
         {
           this.props.password ? <TouchableOpacity onPress={() => {
             this.setState({
               showingPassword: !this.state.showingPassword
             })
-          }}><Feather style={[Styles.InputIcon]} name={this.state.showingPassword ? 'eye' : 'eye-off'} size={24} /></TouchableOpacity> : this.props.icon && <Feather style={[Styles.InputIcon]} name={this.props.icon} size={24} />
+          }}><Feather style={[Styles.InputIcon]} name={this.state.showingPassword ? 'eye' : 'eye-off'} size={24} color={this.getIconColor()} /></TouchableOpacity> : this.props.icon && <Feather style={[Styles.InputIcon]} name={this.props.icon} size={24} color={this.getIconColor()} />
         }
       </View>
     );
+  }
+
+  getIconColor() {
+    let color = this.props.light ? Colors.WHITE : Colors.BORDER_COLOR;
+
+    return color;
   }
 }
 
