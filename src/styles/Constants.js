@@ -5,5 +5,7 @@ export default {
   smallMediumAmount: 8,
   mediumAmount: 10,
   mediumLargeAmount: 12,
-  largeAmount: 16
+  largeAmount: 16,
+
+  loginTimeout: 2000
 }

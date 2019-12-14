@@ -18,7 +18,7 @@ const Styles = StyleSheet.create({
   },
   Content: {
     paddingTop: Constants.largeAmount,
-    paddingBottom: Constants.largeAmount,
+    paddingBottom: Constants.largeAmount + 24,
     paddingLeft: Constants.largeAmount + 12,
     paddingRight: Constants.largeAmount + 12
   },

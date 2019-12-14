@@ -13,7 +13,11 @@ export default {
   READ_AGREE: 'I read and agree to the ',
   TERMS_CONDITIONS: 'Terms and Conditions',
   CLOSE: 'Close',
-
+  ACCEPT: 'Accept',
+  LOGIN_MESSAGE: 'Verifying...',
+  REGISTER: 'Register',
+  NEVERMIND: 'Nevermind',
+  LOGIN: 'Login',
 
 
 

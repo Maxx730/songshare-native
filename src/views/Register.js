@@ -1,8 +1,9 @@
 import React from 'react';
-import { View,Text,StyleSheet } from 'react-native';
+import { View,Text,StyleSheet,Image,Dimensions } from 'react-native';
 import Constants from '../styles/Constants';
 import Colors from '../styles/Colors';
 import Labels from '../styles/Labels';
+import HTML from 'react-native-render-html';
 
 //Import the form components.
 import SsInput from '../components/SsInput';
@@ -11,6 +12,7 @@ import SsCheckbox from '../components/SsCheckbox';
 import SsLink from '../components/SsLink';
 import SsModal from '../components/SsModal';
 import SsHeader from '../components/SsHeader';
+import SsCard from '../components/SsCard';
 
 const Styles = StyleSheet.create({
   Register: {
@@ -20,11 +22,10 @@ const Styles = StyleSheet.create({
     flex: 1
   },
   Form: {
-    padding: Constants.largeAmount,
-    flex: 2
+    padding: Constants.largeAmount
   },
   Foot: {
-    flex: 1
+    flex: 0
   }
 })
 
@@ -46,58 +47,60 @@ class Register extends React.Component {
     return(
       <View style={[Styles.Register]}>
         {
-          this.state.modalOpen && <SsModal visible={this.state.modalOpen} title={'Default Modal'} onClose={() => {
+          this.state.modalOpen && <SsModal visible={this.state.modalOpen} title={Labels.TERMS_CONDITIONS} onClose={() => {
             this.setState({
               modalOpen: false
             });
           }}>
-            <Text>
-              {Labels.EULA}
-            </Text>
+            <HTML html={Labels.EULA}/>
+            <SsButton primary label={Labels.ACCEPT} onPress={() => {
+              this.setState({
+                termsAccepted: true,
+                modalOpen: false
+              });
+            }}/>
           </SsModal>
         }
-        <View style={[Styles.Header]}>
-          <SsHeader>
-
-          </SsHeader>
-        </View>
         <View style={[Styles.Form]}>
-          <SsInput onChange={(value) => {
-            this.setState({
-              username: value
-            });
-          }} placeholder={Labels.USERNAME} icon={'user'} value={this.state.username}/>
-          <SsInput onChange={(value) => {
-            this.setState({
-              password: value
-            });
-          }} placeholder={Labels.PASSWORD} password value={this.state.password}/>
-          <SsInput onChange={(value) => {
-            this.setState({
-              repeatPassword: value
-            });
-          }} placeholder={Labels.REPEAT_PASSWORD} password value={this.state.repeatPassword}/>
-          <SsInput onChange={(value) => {
-            this.setState({
-              email: value
-            });
-          }} placeholder={Labels.EMAIL} icon={'mail'} value={this.state.email}/>
-          <View style={{
-            flexDirection: 'row',
-            justifyContent: 'center'
-          }}>
-            <SsCheckbox label={Labels.READ_AGREE} onChecked={(value) => {
+            <SsInput onChange={(value) => {
               this.setState({
-                termsAccepted: value
+                username: value
               });
-            }}/>
-            <SsLink label={Labels.TERMS_CONDITIONS} style={{marginTop: 1.5}} primary onPress={() => {
+            }} placeholder={Labels.USERNAME} icon={'user'} value={this.state.username}/>
+            <SsInput onChange={(value) => {
               this.setState({
-                modalOpen: true
+                password: value
               });
+            }} placeholder={Labels.PASSWORD} password value={this.state.password}/>
+            <SsInput onChange={(value) => {
+              this.setState({
+                repeatPassword: value
+              });
+            }} placeholder={Labels.REPEAT_PASSWORD} password value={this.state.repeatPassword}/>
+            <SsInput onChange={(value) => {
+              this.setState({
+                email: value
+              });
+            }} placeholder={Labels.EMAIL} icon={'mail'} value={this.state.email}/>
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'center'
+            }}>
+              <SsCheckbox label={Labels.READ_AGREE} onChecked={(value) => {
+                this.setState({
+                  termsAccepted: value
+                });
+              }}/>
+              <SsLink label={Labels.TERMS_CONDITIONS} checked={this.state.termsAccepted} style={{marginTop: 1.5}} primary onPress={() => {
+                this.setState({
+                  modalOpen: true
+                });
+              }}/>
+            </View>
+            <SsButton label={Labels.SUBMIT} caps primary disabled/>
+            <SsButton label={Labels.NEVERMIND} onPress={() => {
+              this.props.navigation.goBack();
             }}/>
-          </View>
-          <SsButton label={Labels.SUBMIT} caps primary disabled/>
         </View>
         <View style={[Styles.Foot]}>
 

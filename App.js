@@ -14,8 +14,19 @@ import Register from './src/views/Register';
 import Forgot from './src/views/Forgot';
 
 const MainNavigation = createStackNavigator({
-  Login: {screen: Login},
-  Register: {screen: Register},
+  Login: {
+    screen: Login,
+    navigationOptions: {
+      title: 'Login',
+      header: null
+    }
+  },
+  Register: {
+    screen: Register,
+    navigationOptions: {
+      header: null
+    }
+  },
   Forgot: {screen: Forgot}
 });
 

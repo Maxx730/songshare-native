@@ -6,8 +6,8 @@ import { FontAwesome } from '@expo/vector-icons';
 
 const Styles = StyleSheet.create({
   SsButton: {
-    marginTop: Constants.tinySmallAmount,
-    marginBottom: Constants.tinySmallAmount,
+    marginTop: Constants.smallAmount,
+    marginBottom: Constants.smallAmount,
     paddingTop: Constants.mediumLargeAmount,
     paddingBottom: Constants.mediumLargeAmount,
     borderRadius: Constants.smallAmount
@@ -58,7 +58,7 @@ const Styles = StyleSheet.create({
 class SsButton extends React.Component {
   render() {
     return(
-      <View style={[this.props.position && {flex: 1},{flex: 1},this.props.disabled && Styles.Disabled]}>
+      <View style={[this.props.position && {flex: 1},this.props.disabled && Styles.Disabled]}>
         <TouchableOpacity onPress={() => {
           if(this.props.position) {
             this.props.onPress(parseInt(this.props.buttonPosition));

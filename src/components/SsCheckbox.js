@@ -35,8 +35,14 @@ class SsCheckbox extends React.Component {
     super(props);
 
     this.state = {
-      checked: this.props.checked || false
+      checked: false
     }
+  }
+
+  componentDidMount() {
+    this.setState({
+      checked: this.props.checked
+    });
   }
 
   render() {

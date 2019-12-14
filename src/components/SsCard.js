@@ -9,15 +9,20 @@ const Styles = StyleSheet.create({
     borderColor: Colors.BORDER_COLOR,
     borderWidth: 1,
     marginTop: Constants.smallAmount,
-    marginBottom: Constants.smallAmount
+    marginBottom: Constants.smallAmount,
+    backgroundColor: Colors.WHITE,
+    flex: 1
   },
   CardHead: {
     borderBottomWidth: 1,
     borderBottomColor: Colors.BORDER_COLOR,
-    padding: Constants.mediumLargeAmount
+    paddingTop: Constants.mediumLargeAmount,
+    paddingBottom: Constants.mediumLargeAmount,
+    paddingLeft: Constants.largeAmount
   },
   CardContent: {
-    padding: Constants.smallMediumAmount
+    padding: Constants.largeAmount,
+    flex: 1
   },
   CardFoot: {
     flexDirection: 'row',
@@ -32,16 +37,27 @@ const Styles = StyleSheet.create({
   },
   Round: {
     borderRadius: Constants.smallAmount
+  },
+  Shadow: {
+    borderWidth: 0,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 20 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 1
   }
 })
 
 class SsCard extends React.Component {
   render() {
       return(
-        <View style={[Styles.SsCard,this.props.round && Styles.Round]}>
+        <View style={[Styles.SsCard,this.props.round && Styles.Round,this.props.shadow && Styles.Shadow]}>
           {
             this.props.title && <View style={[Styles.CardHead]}>
-              <Text>
+              <Text style={[{
+                fontWeight: 'bold',
+                fontSize: Constants.largeAmount
+              }]}>
                 {this.props.title}
               </Text>
             </View>
