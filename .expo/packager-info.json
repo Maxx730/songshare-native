@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 9790,
-  "expoServerNgrokUrl": "https://pz-5i7.anonymous.songshare-native.exp.direct",
-  "packagerNgrokUrl": "https://packager.pz-5i7.anonymous.songshare-native.exp.direct",
-  "ngrokPid": 9818
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null
 }

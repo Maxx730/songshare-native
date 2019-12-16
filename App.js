@@ -12,8 +12,12 @@ import SsCollapse from './src/components/SsCollapse';
 import Login from './src/views/Login';
 import Register from './src/views/Register';
 import Forgot from './src/views/Forgot';
+import Profile from './src/views/Profile';
 
 const MainNavigation = createStackNavigator({
+  Profile: {
+    screen: Profile
+  },
   Login: {
     screen: Login,
     navigationOptions: {

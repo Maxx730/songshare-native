@@ -22,7 +22,8 @@ const Styles = StyleSheet.create({
     flex: 1
   },
   Form: {
-    padding: Constants.largeAmount
+    padding: Constants.largeAmount,
+    flex: 3
   },
   Foot: {
     flex: 0
@@ -61,7 +62,21 @@ class Register extends React.Component {
             }}/>
           </SsModal>
         }
+        <View style={[Styles.Header]}>
+
+        </View>
         <View style={[Styles.Form]}>
+            <Text style={[{
+              fontSize: Constants.mediumLargeAmount * 2
+            }]}>
+              {Labels.REGISTER}
+            </Text>
+            <Text style={[{
+              fontSize: Constants.mediumLargeAmount,
+              paddingBottom: Constants.largeAmount
+            }]}>
+              {Labels.FILL_OUT}
+            </Text>
             <SsInput onChange={(value) => {
               this.setState({
                 username: value

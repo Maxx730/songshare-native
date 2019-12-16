@@ -74,10 +74,16 @@ class Login extends React.Component {
                 <Text style={[
                   {
                     fontSize: Constants.mediumLargeAmount * 2,
-                    paddingBottom: Constants.largeAmount
+                    paddingBottom: Constants.smallAmount
                   }
                 ]}>
                   {Labels.LOGIN}
+                </Text>
+                <Text style={[{
+                  fontSize: Constants.mediumLargeAmount,
+                  paddingBottom: Constants.largeAmount
+                }]}>
+                  {Labels.PLEASE_ENTER}
                 </Text>
                 <SsInput placeholder={Labels.USERNAME} error={this.state.usernameError} icon='user' onChange={(value) => {
                   this.setState({

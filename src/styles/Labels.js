@@ -18,6 +18,12 @@ export default {
   REGISTER: 'Register',
   NEVERMIND: 'Nevermind',
   LOGIN: 'Login',
+  PLEASE_ENTER: 'Please enter a username and password.',
+  FILL_OUT: 'Fill out the information below to start sharing songs!',
+  FOLLOWERS: 'Followers',
+  FOLLOWING: 'Following',
+  FOLLOW: 'Follow',
+  SHARED: 'Tracks Shared',
 
 
 
