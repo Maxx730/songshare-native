@@ -18,8 +18,15 @@ class SsCounter extends React.Component {
     super(props);
 
     this.state = {
-      value: 0
+      value: new Animated.Value(0)
     }
+  }
+
+  componentDidMount() {
+    Animated.timing(this.state.value, {
+      toValue: this.props.value,
+      duration: 1000
+    }).start();
   }
 
   render() {
@@ -29,7 +36,7 @@ class SsCounter extends React.Component {
           fontSize: Constants.largeAmount + 4,
           textTransform: 'uppercase'
         }]}>
-          {this.state.value}
+          {JSON.stringify(this.state)}
         </Text>
         <Text style={[Styles.Center,{
           color: Colors.SUBTITLE,

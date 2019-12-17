@@ -66,7 +66,7 @@ class Profile extends React.Component {
                 fontWeight: 'bold',
                 color: Colors.WHITE
               }]}>
-                Username
+                LongTomThickRod
               </Text>
               <View style={[{
                 flexDirection: 'row'

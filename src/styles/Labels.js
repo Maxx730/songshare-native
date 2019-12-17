@@ -24,6 +24,10 @@ export default {
   FOLLOWING: 'Following',
   FOLLOW: 'Follow',
   SHARED: 'Tracks Shared',
+  HOME: 'Home',
+  SHARES: 'Shares',
+  SEARCH: 'Search',
+  PROFILE: 'Profile',
 
 
 

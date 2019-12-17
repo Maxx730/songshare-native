@@ -13,8 +13,22 @@ import Login from './src/views/Login';
 import Register from './src/views/Register';
 import Forgot from './src/views/Forgot';
 import Profile from './src/views/Profile';
+import Settings from './src/views/Settings';
+import Main from './src/views/Main';
 
 const MainNavigation = createStackNavigator({
+  Main: {
+    screen: Main,
+    navigationOptions: {
+      title: 'Songshare'
+    }
+  },
+  Settings: {
+    screen: Settings,
+    navigationOptions: {
+      title: 'Settings'
+    }
+  },
   Profile: {
     screen: Profile
   },
