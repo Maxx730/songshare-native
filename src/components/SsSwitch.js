@@ -11,23 +11,23 @@ const Styles = StyleSheet.create({
   SwitchCase: {
     padding: Constants.smallAmount,
     borderRadius: Constants.largerAmount,
-    width: Constants.largerAmount * 2.5,
-    height: Constants.largerAmount + 6
+    width: Constants.largerAmount * 2,
+    height: Constants.largerAmount + 3
   },
   SwitchToggle: {
-    width: Constants.largerAmount,
-    height: Constants.largerAmount,
+    width: Constants.largerAmount - 3,
+    height: Constants.largerAmount - 3,
     borderRadius: Constants.largerAmount,
     backgroundColor: Colors.WHITE,
     position: 'absolute'
   },
   True: {
     top: 3,
-    left: 4
+    left: 3
   },
   False: {
     top: 3,
-    right: 4
+    right: 3
   }
 })
 

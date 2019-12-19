@@ -13,8 +13,7 @@ const Styles = StyleSheet.create({
     paddingBottom: Constants.mediumAmount,
     paddingLeft: Constants.mediumAmount,
     paddingRight: Constants.mediumLargeAmount,
-    marginTop: Constants.tinySmallAmount,
-    marginBottom: Constants.tinySmallAmount,
+    margin: Constants.tinySmallAmount,
     flexDirection: 'row'
   },
   Disabled: {
@@ -32,6 +31,9 @@ const Styles = StyleSheet.create({
   },
   Error: {
     borderColor: Colors.DANGER
+  },
+  Circle: {
+    borderRadius: Constants.superAmount
   }
 });
 
@@ -46,8 +48,11 @@ class SsInput extends React.Component {
 
   render() {
     return(
-      <View style={[Styles.SsInput,this.props.disabled && Styles.Disabled, this.props.dashed && Styles.Dashed,this.props.error === true && Styles.Error]}>
-        <TextInput style={[Styles.InputText]} onChangeText={(value) => {
+      <View style={[Styles.SsInput,this.props.disabled && Styles.Disabled, this.props.dashed && Styles.Dashed,this.props.error === true && Styles.Error,this.props.circle && Styles.Circle]}>
+        {
+          this.props.search && <TouchableOpacity><Feather style={[Styles.InputIcon]} name={'search'} size={24} color={this.getIconColor()} /></TouchableOpacity>
+        }
+        <TextInput style={[Styles.InputText,this.props.search && {marginLeft: Constants.largeAmount}]} onChangeText={(value) => {
           this.props.onChange && this.props.onChange(value);
         }} value={this.props.value} disabled={this.props.disabled ? true : false} placeholder={this.props.placeholder} secureTextEntry={(this.props.password && !this.state.showingPassword) ? true : false}/>
         {
@@ -56,6 +61,9 @@ class SsInput extends React.Component {
               showingPassword: !this.state.showingPassword
             })
           }}><Feather style={[Styles.InputIcon]} name={this.state.showingPassword ? 'eye' : 'eye-off'} size={24} color={this.getIconColor()} /></TouchableOpacity> : this.props.icon && <Feather style={[Styles.InputIcon]} name={this.props.icon} size={24} color={this.getIconColor()} />
+        }
+        {
+          (this.props.search && this.props.clear) && <TouchableOpacity><Feather style={[Styles.InputIcon]} name={'x'} size={24} color={Colors.PRIMARY} /></TouchableOpacity>
         }
       </View>
     );

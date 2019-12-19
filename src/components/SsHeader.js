@@ -14,7 +14,10 @@ class SsHeader extends React.Component {
     return(
       <View style={[Styles.SsHeader]}>
         <Text style={[{fontSize: this.getSize(),color: this.getColor()},this.props.style && this.props.style]}>
-          {this.props.children}
+          {this.props.title}
+        </Text>
+        <Text>
+          {this.props.subtitle}
         </Text>
       </View>
     );

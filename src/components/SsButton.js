@@ -6,10 +6,11 @@ import { FontAwesome,Feather } from '@expo/vector-icons';
 
 const Styles = StyleSheet.create({
   SsButton: {
-    marginTop: Constants.tinySmallAmount,
-    marginBottom: Constants.tinySmallAmount,
+    margin: Constants.tinySmallAmount,
     paddingTop: Constants.mediumLargeAmount,
     paddingBottom: Constants.mediumLargeAmount,
+    paddingLeft: Constants.mediumLargeAmount,
+    paddingRight: Constants.mediumLargeAmount,
     borderRadius: Constants.smallAmount
   },
   Default: {
@@ -53,6 +54,15 @@ const Styles = StyleSheet.create({
   },
   Disabled: {
     opacity: .4
+  },
+  Circle: {
+    borderRadius: Constants.superAmount,
+    paddingLeft: Constants.mediumLargeAmount,
+    paddingRight: Constants.mediumLargeAmount
+  },
+  Tinted: {
+    backgroundColor: Colors.PRIMARY_LIGHT,
+    borderWidth: 0
   }
 });
 
@@ -66,12 +76,12 @@ class SsButton extends React.Component {
           }
 
           (this.props.onPress && !this.props.disabled) && this.props.onPress();
-        }} style={[Styles.Default,this.props.link && Styles.Link,this.props.dashed && Styles.Dashed,this.props.primary && Styles.Primary,this.props.danger && Styles.Danger,this.props.style && this.props.style,Styles.SsButton,this.getPosition(this.props.position),{
+        }} style={[Styles.Default,this.props.link && Styles.Link,this.props.dashed && Styles.Dashed,this.props.primary && Styles.Primary,this.props.danger && Styles.Danger,this.props.style && this.props.style,Styles.SsButton,this.getPosition(this.props.position),this.props.circle && Styles.Circle,this.props.tinted && Styles.Tinted,{
           flexDirection: 'row',
           justifyContent: 'center'
         }]}>
           {
-            this.props.icon && <FontAwesome style={[Styles.Icon]} name={this.props.icon} size={20} color={this.getIconColor()}/>
+            this.props.icon && <Feather style={[Styles.Icon]} name={this.props.icon} size={20} color={this.getIconColor()}/>
           }
           {
             this.props.label && <Text style={[this.getTextColor(),{textAlign: 'center',fontSize: 15,padding: Constants.tinySmallAmount},this.props.caps && Styles.Caps]}>
@@ -101,7 +111,7 @@ class SsButton extends React.Component {
     if(this.props.primary || this.props.danger)
       return Colors.WHITE
 
-    if(this.props.link)
+    if(this.props.link || this.props.tinted)
       return Colors.PRIMARY
   }
 

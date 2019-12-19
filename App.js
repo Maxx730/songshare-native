@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, StatusBar } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import SsInput from './src/components/SsInput';
@@ -21,7 +21,10 @@ const MainNavigation = createStackNavigator({
     screen: Main,
     navigationOptions: {
       title: 'Songshare'
-    }
+    },
+    contentOptions: {
+    inactiveBackgroundColor: '#000000',
+}
   },
   Settings: {
     screen: Settings,
@@ -46,6 +49,8 @@ const MainNavigation = createStackNavigator({
     }
   },
   Forgot: {screen: Forgot}
+},{
+  headerMode: 'none'
 });
 
 const App = createAppContainer(MainNavigation);

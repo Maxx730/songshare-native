@@ -49,7 +49,9 @@ class SsTabs extends React.Component {
             return <TouchableOpacity onPress={(event) => {
               this.setState({
                 focused: index
-              })
+              });
+
+              tab.onPress && tab.onPress();
             }} key={`tab-${index}`} style={[index === this.state.focused ? Styles.FocusedTab : Styles.Tab]}>
                 <Feather name={tab.icon} size={24} color={this.state.focused === index ? Colors.PRIMARY : Colors.BLACK}/>
                 {
