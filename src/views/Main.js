@@ -13,6 +13,8 @@ import SsTabs from '../components/SsTabs';
 import SsHeader from '../components/SsHeader';
 import SsButton from '../components/SsButton';
 import SsInput from '../components/SsInput';
+import SsCarousel from '../components/SsCarousel';
+import SsTrackItem from '../components/SsTrackItem';
 
 //Import views here.
 import Profile from './Profile';
@@ -20,8 +22,8 @@ import Search from './Search';
 import Settings from './Settings';
 
 import Scopes from '../utils/Spotify/Scopes';
-import { GetSpotCode,GetAuthorizationCode,GetTokens } from '../utils/Spotify/Api';
-import { SaveValue,GetValue } from '../utils/Storage';
+import { GetSpotCode,GetTokens,SaveApiInfo,SpotifyRequest } from '../utils/Spotify/Api';
+import { SaveValue,GetValue,HasValue,DeleteValue } from '../utils/Storage';
 
 const Styles = StyleSheet.create({
   Main: {
@@ -66,26 +68,32 @@ class Main extends React.Component {
     this.state = {
         focused: 'home',
         searchValue: '',
+        credentials: {},
         data: {}
     }
   }
 
   componentDidMount() {
     //Make API request here.
-    ApiRequest('maxx730','drmario','/authorize').then(data => {
-      GetSpotCode(data,Scopes).then(result => {
-        GetTokens(data,result).then(async res => {
-          console.log(res)
-          //Save the results into storage.
-          await async () => {
-            console.log('anonymous aysnc function')
+    //Check if the user has a Auth code if not then we need to get access to Spotify from the user.
+    //Otherwise we can start making requests.
+    HasValue('authCode').then(value => {
+      if(!value) {
+        console.log('RETRIEVING NEW SPOTIFY AUTH CODE');
+        GetSpotCode('maxx730','drmario').then(code => {
+          GetTokens().then(code => {
+            SaveApiInfo(code).then(success => {
+              this.RequestData();
+            });
+          });
+        });
+      } else {
+        DeleteValue('authCode').then(success => {
+          if(success) {
+            console.log('KEY DELETED');
           }
         });
-      });
-    }).catch(err => {
-      this.setState({
-        data: err
-      });
+      }
     });
   }
 
@@ -97,13 +105,15 @@ class Main extends React.Component {
             <View style={[Styles.Title]}>
               {this.getTitle()}
             </View>
-            <View style={[Styles.Action]}>
-              <SsButton circle tinted icon={'search'} onPress={() => {
-                this.setState({
-                  focused: 'search'
-                });
-              }}/>
-            </View>
+            {
+              this.state.focused !== 'search' && <View style={[Styles.Action]}>
+                <SsButton circle tinted icon={'search'} onPress={() => {
+                  this.setState({
+                    focused: 'search'
+                  });
+                }}/>
+              </View>
+            }
             <View style={[Styles.Action]}>
               <SsButton circle tinted icon={'settings'}/>
             </View>
@@ -156,7 +166,15 @@ class Main extends React.Component {
   getScreen() {
     switch(this.state.focused) {
       case 'home':
-        return <View><Text></Text></View>
+        return <View>
+            <SsCarousel header={'Header 1'} subtitle={'Subtitle 1'}>
+              <SsTrackItem/>
+              <SsTrackItem/>
+              <SsTrackItem/>
+              <SsTrackItem/>
+            </SsCarousel>
+            <SsCarousel header={'Header 2'} subtitle={'Subtitle 2'}/>
+          </View>
       case 'shares':
         return <View><Text></Text></View>
       case 'search':
@@ -181,6 +199,12 @@ class Main extends React.Component {
       default:
         return <Text style={[Styles.TitleText]}>{this.state.focused}</Text>
     }
+  }
+
+  RequestData() {
+    SpotifyRequest('https://api.spotify.com/v1/search?q=tania%20bowra&type=artist').then(data => {
+      console.log(data);
+    });
   }
 }
 

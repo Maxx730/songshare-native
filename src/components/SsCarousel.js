@@ -1,12 +1,23 @@
 import React from 'react';
-import { View,Text,StyleSheet,TouchableOpacity,Image,Animated } from 'react-native';
+import { View,Text,StyleSheet,TouchableOpacity,Image,Animated,FlatList } from 'react-native';
 import Colors from '../styles/Colors';
 import Constants from '../styles/Constants';
 import { Feather } from '@expo/vector-icons';
 
 const Styles = StyleSheet.create({
   SsCarousel: {
+    padding: Constants.largerAmount
+  },
+  Header: {
+    fontSize: Constants.largerAmount,
+    fontWeight: 'bold'
+  },
+  Subtitle: {
 
+  },
+  Track: {
+    paddingTop: Constants.largeAmount,
+    paddingBottom: Constants.largeAmount
   }
 });
 
@@ -16,7 +27,7 @@ class SsCarousel extends React.Component {
       <View style={[Styles.SsCarousel]}>
         {
           this.props.header && <View>
-            <Text>
+            <Text style={[Styles.Header]}>
               {this.props.header}
             </Text>
           </View>
@@ -28,8 +39,10 @@ class SsCarousel extends React.Component {
             </Text>
           </View>
         }
-        <View>
-
+        <View style={[Styles.Track]}>
+          <FlatList>
+            {this.props.children}
+          </FlatList>
         </View>
       </View>
     );
