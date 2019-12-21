@@ -6,7 +6,6 @@ import { FontAwesome,Feather } from '@expo/vector-icons';
 
 const Styles = StyleSheet.create({
   SsButton: {
-    margin: Constants.tinySmallAmount,
     paddingTop: Constants.mediumLargeAmount,
     paddingBottom: Constants.mediumLargeAmount,
     paddingLeft: Constants.mediumLargeAmount,
@@ -15,7 +14,8 @@ const Styles = StyleSheet.create({
   },
   Default: {
     borderColor: Colors.BORDER_COLOR,
-    borderWidth: 1
+    borderWidth: 1,
+    margin: Constants.tinySmallAmount,
   },
   Primary: {
     backgroundColor: Colors.PRIMARY,

@@ -9,6 +9,9 @@ import Labels from '../styles/Labels';
 import SsInput from '../components/SsInput';
 import SsCarousel from '../components/SsCarousel';
 import SsHeader from '../components/SsHeader';
+import SsSpinner from '../components/SsSpinner';
+
+import { SpotifyRequest } from '../utils/Spotify/Api';
 
 const Styles = StyleSheet.create({
   Search: {
@@ -27,17 +30,17 @@ class Search extends React.Component {
     super(props);
 
     this.state = {
-      searchValue: ''
+      loading: false,
+      results: []
     }
   }
 
   render() {
     return(
       <View style={[Styles.Search]}>
-        <View style={[Styles.SearchReccomendations]}>
-          <SsCarousel/>
-          <SsCarousel/>
-        </View>
+        {
+          this.props.term !== '' && <SsSpinner/>
+        }
       </View>
     );
   }

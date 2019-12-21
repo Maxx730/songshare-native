@@ -22,6 +22,14 @@ const Styles = StyleSheet.create({
 });
 
 class SsCarousel extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+
+    }
+  }
+
   render() {
     return(
       <View style={[Styles.SsCarousel]}>

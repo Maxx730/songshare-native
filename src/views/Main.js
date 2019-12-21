@@ -15,6 +15,7 @@ import SsButton from '../components/SsButton';
 import SsInput from '../components/SsInput';
 import SsCarousel from '../components/SsCarousel';
 import SsTrackItem from '../components/SsTrackItem';
+import SsDropdown from '../components/SsDropdown';
 
 //Import views here.
 import Profile from './Profile';
@@ -33,11 +34,10 @@ const Styles = StyleSheet.create({
     flex: 1
   },
   MainTabs: {
-    borderTopColor: Colors.BORDER_COLOR,
-    borderTopWidth: 1
+
   },
   MainHeader: {
-
+    paddingTop: Constants.mediumAmount
   },
   HeaderActions: {
     flexDirection: 'row',
@@ -56,8 +56,9 @@ const Styles = StyleSheet.create({
     justifyContent: 'center',
     padding: Constants.largeAmount,
     textAlignVertical: 'center',
-    textTransform: 'capitalize',
-    fontSize: 16
+    textTransform: 'uppercase',
+    fontSize: Constants.largerAmount,
+    color: Colors.WHITE
   }
 });
 
@@ -69,7 +70,8 @@ class Main extends React.Component {
         focused: 'home',
         searchValue: '',
         credentials: {},
-        data: {}
+        data: {},
+        menuOpen: false
     }
   }
 
@@ -88,11 +90,12 @@ class Main extends React.Component {
           });
         });
       } else {
-        DeleteValue('authCode').then(success => {
-          if(success) {
-            console.log('KEY DELETED');
-          }
-        });
+        // DeleteValue('authCode').then(success => {
+        //   if(success) {
+        //     console.log('KEY DELETED');
+        //   }
+        // });
+        this.RequestData();
       }
     });
   }
@@ -100,29 +103,53 @@ class Main extends React.Component {
   render() {
     return(
       <View style={[Styles.Main]}>
+        <View style={{
+          width: Dimensions.get('window').width * 1.5,
+          height: 450,
+          backgroundColor: Colors.PRIMARY_LIGHT,
+          position: 'absolute',
+          transform: [{ rotate: '-10deg'}],
+          top: -250,
+          left: -200
+        }}>
+
+        </View>
+        <View style={{
+          width: Dimensions.get('window').width * 1.5,
+          height: 400,
+          backgroundColor: Colors.PRIMARY,
+          position: 'absolute',
+          transform: [{ rotate: '-10deg'}],
+          top: -250,
+          left: -200
+        }}>
+
+        </View>
         <View style={[Styles.MainHeader]}>
           <View style={[Styles.HeaderActions]}>
             <View style={[Styles.Title]}>
               {this.getTitle()}
             </View>
-            {
-              this.state.focused !== 'search' && <View style={[Styles.Action]}>
-                <SsButton circle tinted icon={'search'} onPress={() => {
-                  this.setState({
-                    focused: 'search'
-                  });
-                }}/>
-              </View>
-            }
             <View style={[Styles.Action]}>
-              <SsButton circle tinted icon={'settings'}/>
+              <SsDropdown onPress={() => {
+                this.setState({
+                  menuOpen: !this.state.menuOpen
+                })
+              }} open={this.state.menuOpen} data={[
+                {
+                  label: 'Search',
+                  icon: 'search'
+                },
+                {
+                  label: 'Settings',
+                  icon: 'settings'
+                }
+              ]} icon={'more-vertical'} iconColor={Colors.WHITE}/>
             </View>
           </View>
         </View>
         <View style={[Styles.MainContent]}>
           {this.getScreen()}
-          <Text>{JSON.stringify(this.state.data)}</Text>
-          <Text>{JSON.stringify(AuthSession.getRedirectUrl())}</Text>
         </View>
         <View style={[Styles.MainTabs]}>
             <SsTabs tabs={[{
@@ -130,7 +157,8 @@ class Main extends React.Component {
               label: Labels.HOME,
               onPress: () => {
                 this.setState({
-                  focused: 'home'
+                  focused: 'home',
+                  menuOpen: false
                 });
               }
             },{
@@ -138,7 +166,17 @@ class Main extends React.Component {
               label: Labels.SHARES,
               onPress: () => {
                 this.setState({
-                  focused: 'shares'
+                  focused: 'shares',
+                  menuOpen: false
+                });
+              }
+            },{
+              icon: 'play',
+              label: Labels.SHARES,
+              onPress: () => {
+                this.setState({
+                  focused: 'playing',
+                  menuOpen: false
                 });
               }
             },{
@@ -146,7 +184,9 @@ class Main extends React.Component {
               label: Labels.SEARCH,
               onPress: () => {
                 this.setState({
-                  focused: 'search'
+                  focused: 'search',
+                  menuOpen: false,
+                  menuOpen: false
                 });
               }
             },{
@@ -154,7 +194,8 @@ class Main extends React.Component {
               label: Labels.PROFILE,
               onPress: () => {
                 this.setState({
-                  focused: 'profile'
+                  focused: 'profile',
+                  menuOpen: false
                 });
               }
             }]}/>
@@ -178,7 +219,7 @@ class Main extends React.Component {
       case 'shares':
         return <View><Text></Text></View>
       case 'search':
-        return <Search/>
+        return <Search term={this.state.searchValue}/>
       case 'profile':
        return <Profile/>
       case 'settings':
@@ -202,9 +243,11 @@ class Main extends React.Component {
   }
 
   RequestData() {
-    SpotifyRequest('https://api.spotify.com/v1/search?q=tania%20bowra&type=artist').then(data => {
-      console.log(data);
-    });
+    GetValue('authCode').then(value => {
+      this.setState({
+        data: value
+      })
+    })
   }
 }
 

@@ -21,10 +21,7 @@ const MainNavigation = createStackNavigator({
     screen: Main,
     navigationOptions: {
       title: 'Songshare'
-    },
-    contentOptions: {
-    inactiveBackgroundColor: '#000000',
-}
+    }
   },
   Settings: {
     screen: Settings,
