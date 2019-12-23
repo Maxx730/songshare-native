@@ -35,9 +35,19 @@ class Search extends React.Component {
     }
   }
 
+  componentDidMount() {
+    SpotifyRequest('https://api.spotify.com/v1/browse/categories').then(results => {
+      console.log('working')
+      this.setState({
+        results: results
+      })
+    })
+  }
+
   render() {
     return(
       <View style={[Styles.Search]}>
+      <Text>{JSON.stringify(this.state.results)}</Text>
         {
           this.props.term !== '' && <SsSpinner/>
         }

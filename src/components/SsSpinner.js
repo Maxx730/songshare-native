@@ -8,6 +8,11 @@ const Styles = StyleSheet.create({
   SsSpinner: {
     flex: 1,
     justifyContent: 'center'
+  },
+  SpinnerLabel: {
+    textAlign: 'center',
+    padding: Constants.mediumAmount,
+    color: Colors.BORDER_COLOR
   }
 });
 
@@ -16,10 +21,7 @@ class SsSpinner extends React.Component {
     return(
       <View style={[Styles.SsSpinner]}>
         <ActivityIndicator color={Colors.PRIMARY} size={'large'}/>
-        <Text style={{
-          textAlign: 'center',
-          padding: Constants.mediumAmount
-        }}>
+        <Text style={[Styles.SpinnerLabel]}>
           {this.props.message}
         </Text>
       </View>

@@ -34,6 +34,11 @@ const Styles = StyleSheet.create({
   },
   Circle: {
     borderRadius: Constants.superAmount
+  },
+  Tinted: {
+    backgroundColor: Colors.WHITE,
+    borderWidth: 0,
+    opacity: .66
   }
 });
 
@@ -48,7 +53,7 @@ class SsInput extends React.Component {
 
   render() {
     return(
-      <View style={[Styles.SsInput,this.props.disabled && Styles.Disabled, this.props.dashed && Styles.Dashed,this.props.error === true && Styles.Error,this.props.circle && Styles.Circle]}>
+      <View style={[Styles.SsInput,this.props.disabled && Styles.Disabled, this.props.dashed && Styles.Dashed,this.props.error === true && Styles.Error,this.props.circle && Styles.Circle,this.props.tinted && Styles.Tinted]}>
         {
           this.props.search && <TouchableOpacity><Feather style={[Styles.InputIcon]} name={'search'} size={24} color={this.getIconColor()} /></TouchableOpacity>
         }

@@ -47,11 +47,6 @@ class Profile extends React.Component {
     return(
       <View style={[Styles.Profile]}>
         <View style={[Styles.ProfileTop]}>
-          <Image source={require('../../assets/img/register_background.jpg')} style={[{
-            opacity: .4,
-            position: 'absolute',
-            width: Dimensions.get('window').width
-          }]}/>
           <View style={[Styles.UserImage]}>
             <SsAvatar large round source={require('../../assets/img/default-user-img.jpg')}/>
           </View>

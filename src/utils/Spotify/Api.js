@@ -10,7 +10,10 @@ export async function SpotifyRequest(url) {
     //Check if we need to refresh the token.
     await GetValue('experationTime').then(async value => {
       if(!parseInt(value) || new Date().getTime() > parseInt(value)) {
-        await GetTokens(true);
+        console.log('GRABBING NEW SPOTIFY API TOKENS')
+        await GetTokens(true).then(async data => {
+          await SaveValue('accessToken',data.access_token);
+        });
       }
 
         await GetValue('accessToken').then(token => {
@@ -68,6 +71,7 @@ export async function GetTokens(refresh = false) {
     const clientSec = await GetValue('clientSecret');
     const redirectUrl = await GetValue('redirectUrl');
     const refreshToken = await GetValue('refreshToken');
+    const authorizationCode = await GetValue('authCode');
 
     const credsB64 = btoa(`${clientId}:${clientSec}`);
     await fetch(`https://accounts.spotify.com/api/token`,{
@@ -76,7 +80,7 @@ export async function GetTokens(refresh = false) {
         Authorization: `Basic ${credsB64}`,
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: refresh ? `grant_type=authorization_code&code=${authorizationCode}&redirect_uri=${redirectUrl}` : `grant_type=refresh_token&refresh_token=${refreshToken}`
+      body: !refresh ? `grant_type=authorization_code&code=${authorizationCode}&redirect_uri=${redirectUrl}` : `grant_type=refresh_token&refresh_token=${refreshToken}`
     }).then(resp => {
       return resp.json();
     }).then(data => {
@@ -89,7 +93,7 @@ export async function GetTokens(refresh = false) {
 
 //Saves the Spotify info into local storage.
 export async function SaveApiInfo(data) {
-  return new Promise(async (resolve,reject) => {
+  return new Promise(async (resolve,reject) => {''
       await SaveValue('accessToken',data.access_token);
       await SaveValue('refreshToken',data.refresh_token);
       await SaveValue('experationTime',(new Date().getTime() + data.expires_in * 1000).toString());

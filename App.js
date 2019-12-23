@@ -20,7 +20,8 @@ const MainNavigation = createStackNavigator({
   Main: {
     screen: Main,
     navigationOptions: {
-      title: 'Songshare'
+      title: 'Songshare',
+      header: null
     }
   },
   Settings: {
@@ -46,8 +47,6 @@ const MainNavigation = createStackNavigator({
     }
   },
   Forgot: {screen: Forgot}
-},{
-  headerMode: 'none'
 });
 
 const App = createAppContainer(MainNavigation);

@@ -17,15 +17,22 @@ const Styles = StyleSheet.create({
     flex: 1,
     top: (Constants.largeAmount * 2) + Constants.largerAmount,
     minWidth: 200,
-    right: 0
+    right: 0,
+    shadowColor: Colors.PRIMARY,
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: .6,
+    shadowRadius: 20,
+    borderRadius: Constants.smallAmount,
+    elevation: 20,
+    zIndex: 1
   },
   MenuItem: {
     paddingTop: Constants.mediumLargeAmount,
     paddingBottom: Constants.mediumLargeAmount,
     paddingLeft: Constants.largeAmount,
     paddingRight: Constants.largeAmount,
-    flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    zIndex: 999
   },
   MenuItemText: {
     paddingLeft: Constants.largeAmount
@@ -71,16 +78,18 @@ class SsDropdown extends React.Component {
         }
         </View>
         {
-          (this.props.data && this.props.open) && <TouchableOpacity style={[Styles.DropDownMenu]}>
+          (this.props.data && this.props.open) && <View style={[Styles.DropDownMenu]}>
             {
               this.props.data.map((item,index) => {
-                return <TouchableOpacity style={[Styles.MenuItem,index > 0 && Styles.TopBorder]} key={`submenu-item-${index}`}>
+                return <TouchableOpacity key={`submenu-item-${index}`} onPress={() => {
+                  item.onPress && item.onPress()
+                }} style={[Styles.MenuItem,index > 0 && Styles.TopBorder]}>
                   {item.icon && <Feather name={item.icon} size={Constants.largeAmount}/>}
                   <Text style={[Styles.MenuItemText]}>{item.label}</Text>
                 </TouchableOpacity>
               })
-            }
-          </TouchableOpacity>
+          }
+          </View>
         }
       </View>
     );

@@ -16,6 +16,7 @@ import SsInput from '../components/SsInput';
 import SsCarousel from '../components/SsCarousel';
 import SsTrackItem from '../components/SsTrackItem';
 import SsDropdown from '../components/SsDropdown';
+import SsSpinner from '../components/SsSpinner';
 
 //Import views here.
 import Profile from './Profile';
@@ -70,8 +71,10 @@ class Main extends React.Component {
         focused: 'home',
         searchValue: '',
         credentials: {},
-        data: {},
-        menuOpen: false
+        data: null,
+        menuOpen: false,
+        loading: true,
+        albums: []
     }
   }
 
@@ -83,8 +86,9 @@ class Main extends React.Component {
       if(!value) {
         console.log('RETRIEVING NEW SPOTIFY AUTH CODE');
         GetSpotCode('maxx730','drmario').then(code => {
-          GetTokens().then(code => {
-            SaveApiInfo(code).then(success => {
+          GetTokens().then(tokenCode => {
+            // console.log(code);
+            SaveApiInfo(tokenCode).then(success => {
               this.RequestData();
             });
           });
@@ -138,11 +142,18 @@ class Main extends React.Component {
               }} open={this.state.menuOpen} data={[
                 {
                   label: 'Search',
-                  icon: 'search'
+                  icon: 'search',
+                  onPress:() => {
+
+                  }
                 },
                 {
                   label: 'Settings',
-                  icon: 'settings'
+                  icon: 'settings',
+                  onPress: () => {
+                      const {navigate} = this.props.navigation;
+                      navigate('Settings')
+                  }
                 }
               ]} icon={'more-vertical'} iconColor={Colors.WHITE}/>
             </View>
@@ -208,13 +219,25 @@ class Main extends React.Component {
     switch(this.state.focused) {
       case 'home':
         return <View>
-            <SsCarousel header={'Header 1'} subtitle={'Subtitle 1'}>
-              <SsTrackItem/>
-              <SsTrackItem/>
-              <SsTrackItem/>
-              <SsTrackItem/>
-            </SsCarousel>
-            <SsCarousel header={'Header 2'} subtitle={'Subtitle 2'}/>
+            {
+              (!this.state.loading && this.state.data) && <SsCarousel style={[{
+                transform: [{ rotate: '-10deg'}],
+                width: Dimensions.get('window').width + 100,
+                marginLeft: - 50
+              }]} headerStyle={[{
+                paddingLeft: Constants.superAmount + Constants.largeAmount
+              }]} header={'Explore'} subtitle={'Categories'} data={this.state.data.categories.items}/>
+            }
+
+            {
+              (!this.state.loading && this.state.data) && <SsCarousel style={[{
+                transform: [{ rotate: '-10deg'}],
+                width: Dimensions.get('window').width + 100,
+                marginLeft: - 50
+              }]} headerStyle={[{
+                paddingLeft: Constants.superAmount + Constants.largeAmount
+              }]} header={'Explore'} data={this.state.data.categories.items}/>
+            }
           </View>
       case 'shares':
         return <View><Text></Text></View>
@@ -232,21 +255,30 @@ class Main extends React.Component {
   getTitle() {
     switch(this.state.focused) {
       case 'search':
-        return <SsInput clear={this.state.searchValue !== '' ? true : false} search circle placeholder={Labels.SEARCH} onChange={(value) => {
+        return <SsInput clear={this.state.searchValue !== '' ? true : false} search tinted placeholder={Labels.SEARCH} onChange={(value) => {
           this.setState({
             searchValue: value
           });
         }}/>
       default:
-        return <Text style={[Styles.TitleText]}>{this.state.focused}</Text>
+        return <Text style={[Styles.TitleText]}></Text>
     }
   }
 
   RequestData() {
     GetValue('authCode').then(value => {
-      this.setState({
-        data: value
-      })
+      SpotifyRequest('https://api.spotify.com/v1/browse/categories').then(data => {
+        this.setState({
+          data: data.error ? null : data
+        });
+      });
+
+      SpotifyRequest(`https://api.spotify.com/v1/browse/new-releases`).then(data => {
+        this.setState({
+          albums: data.albums.items,
+          loading: false
+        });
+      });
     })
   }
 }
