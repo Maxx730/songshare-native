@@ -18,6 +18,8 @@ export default {
   REGISTER: 'Register',
   NEVERMIND: 'Nevermind',
   LOGIN: 'Login',
+  LOGOUT: 'Logout',
+  CONFIRM_LOGOUT: 'Are you sure you would like to logout?',
   PLEASE_ENTER: 'Please enter a username and password.',
   FILL_OUT: 'Fill out the information below to start sharing songs!',
   FOLLOWERS: 'Followers',
@@ -28,6 +30,11 @@ export default {
   SHARES: 'Shares',
   SEARCH: 'Search',
   PROFILE: 'Profile',
+  FIND_TRACKS: 'Search Spotify for tracks to share!',
+  FEED: 'Feed',
+  FRIENDS_SHARED: 'See tracks that your friends have shared!',
+  SETTINGS: 'Settings',
+  CUSTOMIZE_EXP: 'Customize your application experience.',
 
 
 

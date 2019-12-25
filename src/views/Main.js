@@ -17,6 +17,7 @@ import SsCarousel from '../components/SsCarousel';
 import SsTrackItem from '../components/SsTrackItem';
 import SsDropdown from '../components/SsDropdown';
 import SsSpinner from '../components/SsSpinner';
+import SsNowPlaying from '../components/SsNowPlaying';
 
 //Import views here.
 import Profile from './Profile';
@@ -94,11 +95,11 @@ class Main extends React.Component {
           });
         });
       } else {
-        // DeleteValue('authCode').then(success => {
-        //   if(success) {
-        //     console.log('KEY DELETED');
-        //   }
-        // });
+        DeleteValue('authCode').then(success => {
+          if(success) {
+            console.log('KEY DELETED');
+          }
+        });
         this.RequestData();
       }
     });
@@ -107,109 +108,115 @@ class Main extends React.Component {
   render() {
     return(
       <View style={[Styles.Main]}>
-        <View style={{
-          width: Dimensions.get('window').width * 1.5,
-          height: 450,
-          backgroundColor: Colors.PRIMARY_LIGHT,
-          position: 'absolute',
-          transform: [{ rotate: '-10deg'}],
-          top: -250,
-          left: -200
-        }}>
+        {
+          this.state.focused === 'home' && <View style={{
+            width: Dimensions.get('window').width * 1.5,
+            height: 450,
+            backgroundColor: Colors.PRIMARY_LIGHT,
+            position: 'absolute',
+            transform: [{ rotate: '-10deg'}],
+            top: -250,
+            left: -200
+          }}></View>
+        }
+        {
+          this.state.focused === 'home' && <View style={{
+            width: Dimensions.get('window').width * 1.5,
+            height: 400,
+            backgroundColor: Colors.PRIMARY,
+            position: 'absolute',
+            transform: [{ rotate: '-10deg'}],
+            top: -250,
+            left: -200
+          }}></View>
+        }
+        {
+          this.state.focused === 'home' && <View style={[Styles.MainHeader]}>
+            <View style={[Styles.HeaderActions]}>
+              <View style={[Styles.Title]}>
+                {this.getTitle()}
+              </View>
+              <View style={[Styles.Action]}>
+                <SsDropdown onPress={() => {
+                  this.setState({
+                    menuOpen: !this.state.menuOpen
+                  })
+                }} open={this.state.menuOpen} data={[
+                  {
+                    label: 'Search',
+                    icon: 'search',
+                    onPress:() => {
 
-        </View>
-        <View style={{
-          width: Dimensions.get('window').width * 1.5,
-          height: 400,
-          backgroundColor: Colors.PRIMARY,
-          position: 'absolute',
-          transform: [{ rotate: '-10deg'}],
-          top: -250,
-          left: -200
-        }}>
-
-        </View>
-        <View style={[Styles.MainHeader]}>
-          <View style={[Styles.HeaderActions]}>
-            <View style={[Styles.Title]}>
-              {this.getTitle()}
-            </View>
-            <View style={[Styles.Action]}>
-              <SsDropdown onPress={() => {
-                this.setState({
-                  menuOpen: !this.state.menuOpen
-                })
-              }} open={this.state.menuOpen} data={[
-                {
-                  label: 'Search',
-                  icon: 'search',
-                  onPress:() => {
-
+                    }
+                  },
+                  {
+                    label: 'Settings',
+                    icon: 'settings',
+                    onPress: () => {
+                        const {navigate} = this.props.navigation;
+                        navigate('Settings')
+                    }
                   }
-                },
-                {
-                  label: 'Settings',
-                  icon: 'settings',
-                  onPress: () => {
-                      const {navigate} = this.props.navigation;
-                      navigate('Settings')
-                  }
-                }
-              ]} icon={'more-vertical'} iconColor={Colors.WHITE}/>
+                ]} icon={'more-vertical'} iconColor={Colors.WHITE}/>
+              </View>
             </View>
           </View>
-        </View>
+        }
         <View style={[Styles.MainContent]}>
           {this.getScreen()}
         </View>
-        <View style={[Styles.MainTabs]}>
-            <SsTabs tabs={[{
-              icon: 'home',
-              label: Labels.HOME,
-              onPress: () => {
-                this.setState({
-                  focused: 'home',
-                  menuOpen: false
-                });
-              }
-            },{
-              icon: 'heart',
-              label: Labels.SHARES,
-              onPress: () => {
-                this.setState({
-                  focused: 'shares',
-                  menuOpen: false
-                });
-              }
-            },{
-              icon: 'play',
-              label: Labels.SHARES,
-              onPress: () => {
-                this.setState({
-                  focused: 'playing',
-                  menuOpen: false
-                });
-              }
-            },{
-              icon: 'search',
-              label: Labels.SEARCH,
-              onPress: () => {
-                this.setState({
-                  focused: 'search',
-                  menuOpen: false,
-                  menuOpen: false
-                });
-              }
-            },{
-              icon: 'user',
-              label: Labels.PROFILE,
-              onPress: () => {
-                this.setState({
-                  focused: 'profile',
-                  menuOpen: false
-                });
-              }
-            }]}/>
+        <View style={[{
+          justifyContent: 'flex-end'
+        }]}>
+          <View style={[Styles.MainTabs]}>
+              <SsTabs tabs={[{
+                icon: 'home',
+                label: Labels.HOME,
+                onPress: () => {
+                  this.setState({
+                    focused: 'home',
+                    menuOpen: false
+                  });
+                }
+              },{
+                icon: 'heart',
+                label: Labels.SHARES,
+                onPress: () => {
+                  this.setState({
+                    focused: 'shares',
+                    menuOpen: false
+                  });
+                }
+              },{
+                icon: 'play',
+                label: Labels.SHARES,
+                onPress: () => {
+                  this.setState({
+                    focused: 'playing',
+                    menuOpen: false
+                  });
+                }
+              },{
+                icon: 'search',
+                label: Labels.SEARCH,
+                onPress: () => {
+                  this.setState({
+                    focused: 'search',
+                    menuOpen: false,
+                    menuOpen: false
+                  });
+                }
+              },{
+                icon: 'settings',
+                label: Labels.PROFILE,
+                onPress: () => {
+                  this.setState({
+                    focused: 'settings',
+                    menuOpen: false
+                  });
+                }
+              }]}/>
+          </View>
         </View>
       </View>
     );
@@ -220,6 +227,9 @@ class Main extends React.Component {
       case 'home':
         return <View>
             {
+              this.state.loading && <SsSpinner/>
+            }
+            {
               (!this.state.loading && this.state.data) && <SsCarousel style={[{
                 transform: [{ rotate: '-10deg'}],
                 width: Dimensions.get('window').width + 100,
@@ -229,15 +239,7 @@ class Main extends React.Component {
               }]} header={'Explore'} subtitle={'Categories'} data={this.state.data.categories.items}/>
             }
 
-            {
-              (!this.state.loading && this.state.data) && <SsCarousel style={[{
-                transform: [{ rotate: '-10deg'}],
-                width: Dimensions.get('window').width + 100,
-                marginLeft: - 50
-              }]} headerStyle={[{
-                paddingLeft: Constants.superAmount + Constants.largeAmount
-              }]} header={'Explore'} data={this.state.data.categories.items}/>
-            }
+
           </View>
       case 'shares':
         return <View><Text></Text></View>
@@ -254,12 +256,6 @@ class Main extends React.Component {
 
   getTitle() {
     switch(this.state.focused) {
-      case 'search':
-        return <SsInput clear={this.state.searchValue !== '' ? true : false} search tinted placeholder={Labels.SEARCH} onChange={(value) => {
-          this.setState({
-            searchValue: value
-          });
-        }}/>
       default:
         return <Text style={[Styles.TitleText]}></Text>
     }

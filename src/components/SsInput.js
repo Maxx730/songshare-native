@@ -53,7 +53,7 @@ class SsInput extends React.Component {
 
   render() {
     return(
-      <View style={[Styles.SsInput,this.props.disabled && Styles.Disabled, this.props.dashed && Styles.Dashed,this.props.error === true && Styles.Error,this.props.circle && Styles.Circle,this.props.tinted && Styles.Tinted]}>
+      <View style={[Styles.SsInput,this.props.disabled && Styles.Disabled, this.props.dashed && Styles.Dashed,this.props.error === true && Styles.Error,this.props.circle && Styles.Circle,this.props.tinted && Styles.Tinted, this.props.style && this.props.style]}>
         {
           this.props.search && <TouchableOpacity><Feather style={[Styles.InputIcon]} name={'search'} size={24} color={this.getIconColor()} /></TouchableOpacity>
         }
@@ -68,7 +68,9 @@ class SsInput extends React.Component {
           }}><Feather style={[Styles.InputIcon]} name={this.state.showingPassword ? 'eye' : 'eye-off'} size={24} color={this.getIconColor()} /></TouchableOpacity> : this.props.icon && <Feather style={[Styles.InputIcon]} name={this.props.icon} size={24} color={this.getIconColor()} />
         }
         {
-          (this.props.search && this.props.clear) && <TouchableOpacity><Feather style={[Styles.InputIcon]} name={'x'} size={24} color={Colors.PRIMARY} /></TouchableOpacity>
+          (this.props.search && this.props.clear) && <TouchableOpacity onPress={() => {
+            this.props.onClear && this.props.onClear();
+          }}><Feather style={[Styles.InputIcon]} name={'x'} size={24} color={Colors.PRIMARY} /></TouchableOpacity>
         }
       </View>
     );

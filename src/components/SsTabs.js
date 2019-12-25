@@ -6,14 +6,17 @@ import { Feather } from '@expo/vector-icons';
 
 const Styles = StyleSheet.create({
   SsTabs: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    backgroundColor: Colors.WHITE
   },
   Tab: {
     flex: 1,
     paddingTop: Constants.largeAmount,
     paddingBottom: Constants.largeAmount,
     flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderTopWidth: 1,
+    borderTopColor: Colors.BORDER_COLOR
   },
   FocusedTab: {
     flex: 1,
@@ -21,7 +24,9 @@ const Styles = StyleSheet.create({
     paddingBottom: Constants.largeAmount,
     flexDirection: 'row',
     justifyContent: 'center',
-    backgroundColor: Colors.PRIMARY_LIGHT
+    backgroundColor: Colors.PRIMARY_LIGHT,
+    borderTopWidth: 1,
+    borderTopColor: Colors.PRIMARY
   }
 });
 
