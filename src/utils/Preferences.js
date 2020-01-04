@@ -22,7 +22,19 @@ export default {
     type: 'button',
     dialog: {
       title: Labels.LOGOUT,
-      message: Labels.CONFIRM_LOGOUT
+      message: Labels.CONFIRM_LOGOUT,
+      onPress: (context) => {
+        console.log(context)
+      }
+    }
+  },
+  {
+    id: 4,
+    type: 'button',
+    label: Labels.ABOUT,
+    dialog: {
+      title: Labels.ABOUT,
+      message: 'Created by John M Kinghorn'
     }
   }]
 }

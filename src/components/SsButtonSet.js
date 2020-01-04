@@ -27,7 +27,7 @@ class SsButtonSet extends React.Component {
           this.props.children.map((child,index) => {
               return <SsButton buttonPosition={index} onPress={() => {
                 this.setActiveButton(index);
-              }} primary={index == this.state.active ? true : false} icon={child.props.icon ? child.props.icon : null} position={this.getButtonPosition(index)} key={`buttonset-button-${index}`} label={child.props.label}/>
+              }} circle={child.props.round ? true : false} tinted={(index === this.state.active && child.props.tinted) ? true : false} primary={(index == this.state.active && child.props.primary) ? true : false} icon={child.props.icon ? child.props.icon : null} position={this.getButtonPosition(index)} key={`buttonset-button-${index}`} label={child.props.label}/>
           })
         }
       </View>

@@ -1,9 +1,11 @@
 import React from 'react';
-import { View,Text,StyleSheet,KeyboardAvoidingView,TouchableOpacity,Image } from 'react-native';
+import { View,Text,StyleSheet,KeyboardAvoidingView,TouchableOpacity,Image,Keyboard } from 'react-native';
 import Constants from '../styles/Constants';
 import Colors from '../styles/Colors';
 import Labels from '../styles/Labels';
 import { CheckAccess } from '../utils/Network';
+import { Analytics, PageHit, Event } from 'expo-analytics';
+import { SaveValue,GetValue,HasValue,DeleteValue } from '../utils/Storage';
 
 //Import the components we need to create the login view.
 import SsInput from '../components/SsInput';
@@ -19,11 +21,7 @@ const Styles = StyleSheet.create({
     flex: 1
   },
   Header: {
-    flex: 2.5,
-    backgroundColor: Colors.PRIMARY,
-    alignContent: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden'
+
   },
   Form: {
     padding: Constants.largeAmount,
@@ -32,6 +30,12 @@ const Styles = StyleSheet.create({
   },
   SocialLogins: {
     flexDirection: 'row'
+  },
+  KeyboardUp: {
+    flex: .25
+  },
+  KeyboardDown: {
+    flex: 1
   }
 })
 
@@ -45,26 +49,65 @@ class Login extends React.Component {
       usernameError: false,
       passwordError: false,
       loading: false,
-      error: ''
+      error: '',
+      keyboardShowing: false
     }
+
+    this._keyboardDidShow = this._keyboardDidShow.bind(this);
+    this._keyboardDidHide = this._keyboardDidHide.bind(this);
+  }
+
+  componentDidMount() {
+    const analytics = new Analytics('UA-85720731-3');
+    analytics.hit(new PageHit('Login'))
+      .then(() => {
+
+      }).catch(e => {
+
+      });
+
+      //Check if the user is already logged in, if so direct to main
+      HasValue('user_id').then(data => {
+        console.log(data)
+        if(data) {
+          this.props.navigation.navigate('Main');
+        }
+      })
+
+    //Add listeners to the keyboard and set the functions that we want to run
+    this.keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      this._keyboardDidShow,
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      this._keyboardDidHide,
+    );
+  }
+
+  componentWillUnmount() {
+    //Remove the keyboard listeners once the login screen is gone.
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+
+  _keyboardDidShow() {
+    this.setState({
+      keyboardShowing: true
+    });
+  }
+
+  _keyboardDidHide() {
+    this.setState({
+      keyboardShowing: false
+    });
   }
 
   render() {
       const {navigate} = this.props.navigation;
       return(
         <KeyboardAvoidingView style={[Styles.Login]} behavior='padding'>
-          <View style={[Styles.Header]}>
-            <Image source={require('../../assets/img/djbooth.jpg')} style={{
-              opacity: .3,
-              position: 'absolute'
-            }}/>
-            <SsHeader light style={{textAlign: 'center'}}>
-              {Labels.HELLO}
-            </SsHeader>
-            <Text style={{textAlign: 'center',color: Colors.WHITE,fontSize: 16}}>
-              {Labels.SIGN_INTO}
-            </Text>
-          </View>
+          <View style={[this.state.keyboardShowing ? Styles.KeyboardUp : Styles.KeyboardDown]}></View>
           <View style={[Styles.Form]}>
             {
               this.state.loading ? <SsSpinner message={Labels.LOGIN_MESSAGE}/> :
@@ -74,14 +117,15 @@ class Login extends React.Component {
                 <Text style={[
                   {
                     fontSize: Constants.mediumLargeAmount * 2,
-                    paddingBottom: Constants.smallAmount
+                    paddingLeft: Constants.mediumAmount
                   }
                 ]}>
                   {Labels.LOGIN}
                 </Text>
                 <Text style={[{
                   fontSize: Constants.mediumLargeAmount,
-                  paddingBottom: Constants.largeAmount
+                  paddingBottom: Constants.largeAmount,
+                  paddingLeft: Constants.mediumAmount
                 }]}>
                   {Labels.PLEASE_ENTER}
                 </Text>
@@ -123,8 +167,12 @@ class Login extends React.Component {
                             error: data.MESSAGE
                           });
                         } else {
-                          this.setState({
-                            loading: false
+                          //We are going to want to pass information along to the
+                          //next screen which will determine redirects when opening the application
+                          //so that the user does not see the login screen again.
+                          navigate('Main',{
+                            user: data,
+                            password: this.state.password
                           });
                         }
                       },Constants.loginTimeout);
@@ -166,6 +214,10 @@ class Login extends React.Component {
     } else {
       return false
     }
+  }
+
+  _loginWithFacebook() {
+
   }
 }
 

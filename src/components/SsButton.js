@@ -14,8 +14,7 @@ const Styles = StyleSheet.create({
   },
   Default: {
     borderColor: Colors.BORDER_COLOR,
-    borderWidth: 1,
-    margin: Constants.tinySmallAmount,
+    borderWidth: 1
   },
   Primary: {
     backgroundColor: Colors.PRIMARY,
@@ -62,7 +61,11 @@ const Styles = StyleSheet.create({
   },
   Tinted: {
     backgroundColor: Colors.PRIMARY_LIGHT,
-    borderWidth: 0
+    borderWidth: 1,
+    borderColor: Colors.PRIMARY_LIGHT
+  },
+  Small: {
+    padding: Constants.smallAmount
   }
 });
 
@@ -76,10 +79,13 @@ class SsButton extends React.Component {
           }
 
           (this.props.onPress && !this.props.disabled) && this.props.onPress();
-        }} style={[Styles.Default,this.props.link && Styles.Link,this.props.dashed && Styles.Dashed,this.props.primary && Styles.Primary,this.props.danger && Styles.Danger,this.props.style && this.props.style,Styles.SsButton,this.getPosition(this.props.position),this.props.circle && Styles.Circle,this.props.tinted && Styles.Tinted,{
+        }} style={[Styles.Default,this.props.link && Styles.Link,this.props.dashed && Styles.Dashed,this.props.primary && Styles.Primary,this.props.danger && Styles.Danger,this.props.style && this.props.style,Styles.SsButton,this.getPosition(this.props.position),this.props.circle && Styles.Circle,this.props.tinted && Styles.Tinted,this.props.color && {
+          backgroundColor: this.props.color,
+          borderColor: this.props.color
+        },{
           flexDirection: 'row',
           justifyContent: 'center'
-        }]}>
+        },this.props.small && Styles.Small]}>
           {
             this.props.icon && <Feather style={[Styles.Icon]} name={this.props.icon} size={20} color={this.getIconColor()}/>
           }
@@ -87,6 +93,9 @@ class SsButton extends React.Component {
             this.props.label && <Text style={[this.getTextColor(),{textAlign: 'center',fontSize: 15,padding: Constants.tinySmallAmount},this.props.caps && Styles.Caps]}>
               {
                this.props.label
+              }
+              {
+                this.props.tinted
               }
             </Text>
           }

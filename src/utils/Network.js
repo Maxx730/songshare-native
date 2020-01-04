@@ -3,16 +3,17 @@ import { Buffer } from 'buffer';
 const API_ENDPOINT = 'https://songshare.mobi';
 
   //Standard API request to backend with basic authentication.
-  export async function ApiRequest(username,password,url) {
+  export async function ApiRequest(username,password,url,body,method = 'GET') {
     console.log('RUNNING SECRET REQUEST');
     return new Promise(async (resolve,reject) => {
       await fetch( `${API_ENDPOINT}${url}`,{
-          method: 'GET',
+          method: method,
           headers: new Headers({
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/json',
             'withCredentials': true,
             'Authorization': `Basic ${new Buffer(`${username}:${password}`).toString('base64')}`
-          })
+          }),
+          body: JSON.stringify(body)
         }).then(response => {
           return response.json();
         }).then(data => {

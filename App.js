@@ -17,6 +17,13 @@ import Settings from './src/views/Settings';
 import Main from './src/views/Main';
 
 const MainNavigation = createStackNavigator({
+  Login: {
+    screen: Login,
+    navigationOptions: {
+      title: 'Login',
+      header: null
+    }
+  },
   Main: {
     screen: Main,
     navigationOptions: {
@@ -32,13 +39,6 @@ const MainNavigation = createStackNavigator({
   },
   Profile: {
     screen: Profile
-  },
-  Login: {
-    screen: Login,
-    navigationOptions: {
-      title: 'Login',
-      header: null
-    }
   },
   Register: {
     screen: Register,

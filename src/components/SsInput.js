@@ -1,8 +1,10 @@
 import React from 'react';
-import { View,Text,StyleSheet,TextInput,TouchableOpacity } from 'react-native';
+import { View,Text,StyleSheet,TextInput,TouchableOpacity,Switch } from 'react-native';
 import Colors from '../styles/Colors';
 import Constants from '../styles/Constants';
 import { Feather } from '@expo/vector-icons';
+
+import SsSwitch from './SsSwitch';
 
 const Styles = StyleSheet.create({
   SsInput: {
@@ -26,8 +28,7 @@ const Styles = StyleSheet.create({
     flex: 1
   },
   InputIcon: {
-    alignContent: 'flex-end',
-    paddingTop: 2
+    alignContent: 'flex-end'
   },
   Error: {
     borderColor: Colors.DANGER
@@ -39,6 +40,11 @@ const Styles = StyleSheet.create({
     backgroundColor: Colors.WHITE,
     borderWidth: 0,
     opacity: .66
+  },
+  Borderless: {
+    borderWidth: 0
+  },
+  SearchIcon: {
   }
 });
 
@@ -53,11 +59,11 @@ class SsInput extends React.Component {
 
   render() {
     return(
-      <View style={[Styles.SsInput,this.props.disabled && Styles.Disabled, this.props.dashed && Styles.Dashed,this.props.error === true && Styles.Error,this.props.circle && Styles.Circle,this.props.tinted && Styles.Tinted, this.props.style && this.props.style]}>
+      <View style={[Styles.SsInput,this.props.disabled && Styles.Disabled, this.props.dashed && Styles.Dashed,this.props.error === true && Styles.Error,this.props.circle && Styles.Circle,this.props.tinted && Styles.Tinted,this.props.borderless && Styles.Borderless, this.props.style && this.props.style]}>
         {
-          this.props.search && <TouchableOpacity><Feather style={[Styles.InputIcon]} name={'search'} size={24} color={this.getIconColor()} /></TouchableOpacity>
+          this.props.search && <TouchableOpacity style={[Styles.SearchIcon]}><Feather style={[Styles.InputIcon]} name={'search'} size={24} color={this.getIconColor()} /></TouchableOpacity>
         }
-        <TextInput style={[Styles.InputText,this.props.search && {marginLeft: Constants.largeAmount}]} onChangeText={(value) => {
+        <TextInput style={[Styles.InputText,this.props.search && {marginLeft: Constants.smallAmount}]} onChangeText={(value) => {
           this.props.onChange && this.props.onChange(value);
         }} value={this.props.value} disabled={this.props.disabled ? true : false} placeholder={this.props.placeholder} secureTextEntry={(this.props.password && !this.state.showingPassword) ? true : false}/>
         {

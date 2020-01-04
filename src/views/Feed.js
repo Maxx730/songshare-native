@@ -3,10 +3,12 @@ import { View,Text,StyleSheet,KeyboardAvoidingView,TouchableOpacity,Image } from
 import Constants from '../styles/Constants';
 import Colors from '../styles/Colors';
 import Labels from '../styles/Labels';
+import Global from '../styles/Global';
 
 const Styles= StyleSheet.create({
   Feed: {
-
+    paddingTop: Constants.largestAmount,
+    flex: 1
   },
   Header: {
 
@@ -19,11 +21,11 @@ class Feed extends React.Component {
   render() {
     return(
       <View style={[Styles.Feed]}>
-        <View style={[Styles.Header]}>
-          <Text>
+        <View>
+          <Text style={[Global.ScreenTitle]}>
             {Labels.FEED}
           </Text>
-          <Text>
+          <Text style={[Global.ScreenSubTitle]}>
             {Labels.FRIENDS_SHARED}
           </Text>
         </View>

@@ -12,22 +12,22 @@ const Styles = StyleSheet.create({
     padding: Constants.smallAmount,
     borderRadius: Constants.largerAmount,
     width: Constants.largerAmount * 2,
-    height: Constants.largerAmount + 3
+    height: Constants.largerAmount + 6
   },
   SwitchToggle: {
-    width: Constants.largerAmount - 3,
-    height: Constants.largerAmount - 3,
+    width: Constants.largerAmount,
+    height: Constants.largerAmount,
     borderRadius: Constants.largerAmount,
     backgroundColor: Colors.WHITE,
     position: 'absolute'
   },
   True: {
     top: 3,
-    left: 3
+    right: 3
   },
   False: {
     top: 3,
-    right: 3
+    left: 4
   }
 })
 

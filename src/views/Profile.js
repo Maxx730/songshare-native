@@ -3,8 +3,10 @@ import { View,Text,StyleSheet,KeyboardAvoidingView,TouchableOpacity,Image,Dimens
 import Constants from '../styles/Constants';
 import Colors from '../styles/Colors';
 import Labels from '../styles/Labels';
+import Global from '../styles/Global';
 import { CheckAccess } from '../utils/Network';
 import { MaterialIcons } from '@expo/vector-icons';
+import { GetValue } from '../utils/Storage';
 
 //Import components
 import SsAvatar from '../components/SsAvatar';
@@ -13,85 +15,96 @@ import SsCounter from '../components/SsCounter';
 
 const Styles = StyleSheet.create({
   Profile: {
-
+    paddingTop: Constants.largestAmount,
+    flex: 1
   },
-  UserImage: {
-    justifyContent: 'center',
+  ProfileCard: {
+    flex: 2
+  },
+  ProfileHeader: {
+    padding: Constants.largeAmount
+  },
+  ProfileTitle: {
+    fontSize: 24,
+    fontWeight: 'bold'
+  },
+  AvatarFrame: {
     alignItems: 'center',
-    paddingTop: Constants.superAmount / 2
+    justifyContent: 'center',
+    paddingTop: Constants.largerAmount,
+    paddingBottom: Constants.largerAmount,
+    height: Dimensions.get('window').height / 4
   },
-  UserInfo: {
-    flexDirection: 'row',
-    paddingRight: Constants.largeAmount,
-    paddingLeft: Constants.largeAmount
+  BlurredBackground: {
+    position: 'absolute',
+    left: 0,
+    top: 0
   },
-  UserActions: {
-    paddingBottom: Constants.largeAmount,
-    paddingLeft: Constants.largeAmount,
-    paddingRight: Constants.largeAmount
-  },
-  UserCounters: {
-    flexDirection: 'row',
-    paddingLeft: Constants.largeAmount,
-    paddingRight: Constants.largeAmount,
-    paddingTop: Constants.largeAmount
-  },
-  ProfileTop: {
-    backgroundColor: Colors.PRIMARY,
-    overflow: 'hidden'
+  BlurredFrame: {
+    overflow: 'hidden',
+    height: Dimensions.get('window').height / 4,
+    width: Dimensions.get('window').width
   }
 })
 
 class Profile extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      backgroundBlur: new Animated.Value(0),
+      username: 'TESTING',
+      email: 'TEST@TESTING.COM'
+    }
+  }
+
+  componentDidMount() {
+    GetValue('username').then(data => {
+      this.setState({
+        username: data
+      });
+    });
+
+    Animated.timing(
+      this.state.backgroundBlur,
+      {
+        toValue: 50,
+        duration: 250
+      }
+    ).start();
+  }
+
   render() {
     return(
       <View style={[Styles.Profile]}>
-        <View style={[Styles.ProfileTop]}>
-          <View style={[Styles.UserImage]}>
-            <SsAvatar large round source={require('../../assets/img/default-user-img.jpg')}/>
-          </View>
-          <View style={[Styles.UserInfo]}>
-            <View style={[{
-              flex: 1,
-              padding: Constants.largeAmount,
-              alignItems: 'center'
-            }]}>
-              <Text style={[{
-                fontSize: Constants.largerAmount,
-                fontWeight: 'bold',
-                color: Colors.WHITE
-              }]}>
-                LongTomThickRod
-              </Text>
-              <View style={[{
-                flexDirection: 'row'
-              }]}>
-                <View style={[{
-                  padding: Constants.tinySmallAmount
-                }]}>
-                  <MaterialIcons name={'location-on'} size={10} color={Colors.WHITE} style={{
-
-                  }}/>
-                </View>
-                <View>
-                  <Text style={[{
-                    color: Colors.WHITE,
-                    fontWeight: 'bold'
-                  }]}>
-                    Burlington, VT
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </View>
-          <View style={[Styles.UserActions]}>
-            <SsButton label={Labels.FOLLOW} primary caps/>
-          </View>
+        <View style={[Styles.ProfileHeader]}>
+          <Text style={[Styles.ProfileTitle]}>
+            {Labels.PROFILE}
+          </Text>
         </View>
-        <View style={[Styles.UserCounters]}>
-          <SsCounter value={127} label={Labels.FOLLOWERS}/>
-          <SsCounter value={54} label={Labels.FOLLOWING}/>
-          <SsCounter value={324} label={Labels.SHARED}/>
+        <View style={[Styles.AvatarFrame]}>
+          <View style={[Styles.BlurredFrame]}>
+            <Animated.Image blurRadius={20} source={{
+              uri: 'https://cdn.vox-cdn.com/thumbor/i3jZzYEmCQbePOxn1GjHgE8f7TQ=/0x0:3840x2160/1200x800/filters:focal(2224x848:2838x1462)/cdn.vox-cdn.com/uploads/chorus_image/image/60888389/Spyro_Reignited_Trilogy_010_Press_Release.0.jpg',
+              width: Dimensions.get('window').width,
+              height: 300
+            }} style={[Styles.BlurredBackground]}/>
+          </View>
+          <SsAvatar large round style={{
+            position: 'absolute',
+            top: 40,
+            left: 0,
+            width: 200,
+            height: 200
+          }}/>
+        </View>
+        <View style={[Styles.ProfileCard]}>
+          <Text style={[Global.ScreenTitle]}>
+            {this.state.username}
+          </Text>
+          <Text style={[Global.ScreenSubTitle]}>
+            {Labels.FRIENDS_SHARED}
+          </Text>
         </View>
       </View>
     );

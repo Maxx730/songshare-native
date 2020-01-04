@@ -35,6 +35,10 @@ export default {
   FRIENDS_SHARED: 'See tracks that your friends have shared!',
   SETTINGS: 'Settings',
   CUSTOMIZE_EXP: 'Customize your application experience.',
+  POPULARITY: 'Popularity',
+  ABOUT: 'About',
+  TRACK_DETAILS: 'Track Details',
+  SHARE: 'Share!',
 
 
 

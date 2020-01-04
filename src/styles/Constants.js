@@ -11,5 +11,7 @@ export default {
 
   superAmount: 64,
 
-  loginTimeout: 2000
+  loginTimeout: 2000,
+  drawerDuration: 250,
+  shadeAmount: .7
 }

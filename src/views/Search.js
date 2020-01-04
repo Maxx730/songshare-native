@@ -1,8 +1,9 @@
 import React from 'react';
-import { View,Text,StyleSheet,TouchableOpacity,Image,FlatList } from 'react-native';
+import { View,Text,StyleSheet,TouchableOpacity,Image,FlatList,Dimensions,ScrollView } from 'react-native';
+import { BlurView } from 'expo-blur';
 import Colors from '../styles/Colors';
 import Constants from '../styles/Constants';
-import { FontAwesome } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import Labels from '../styles/Labels';
 import Global from '../styles/Global';
 
@@ -11,8 +12,20 @@ import SsInput from '../components/SsInput';
 import SsCarousel from '../components/SsCarousel';
 import SsHeader from '../components/SsHeader';
 import SsSpinner from '../components/SsSpinner';
+import SsDialog from '../components/SsDialog';
+import SsTrackInfo from '../components/SsTrackInfo';
+import SsRating from '../components/SsRating';
+import SsButton from '../components/SsButton';
+import SsButtonSet from '../components/SsButtonSet';
+import SsSwitch from '../components/SsSwitch';
+import SsDrawer from '../components/SsDrawer';
+import SsPill from '../components/SsPill';
+import SsAvatar from '../components/SsAvatar';
 
+import { LastFmSearchTracks } from '../utils/Last.fm/Api';
 import { SpotifyRequest } from '../utils/Spotify/Api';
+import { ApiRequest } from '../utils/Network';
+import { GetValue,GetSecure } from '../utils/Storage';
 
 const Styles = StyleSheet.create({
   Search: {
@@ -20,7 +33,12 @@ const Styles = StyleSheet.create({
     flex: 1
   },
   SearchTop: {
-
+    paddingLeft: Constants.mediumAmount,
+    paddingRight: Constants.mediumAmount,
+    paddingBottom: Constants.mediumAmount,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.BORDER_COLOR,
+    flexDirection: 'row'
   },
   SearchReccomendations: {
 
@@ -38,6 +56,41 @@ const Styles = StyleSheet.create({
   ItemTrackTitle: {
     fontSize: Constants.largeAmount + 2,
     fontWeight: 'bold'
+  },
+  TrackArtist: {
+    fontSize: Constants.largeAmount,
+    paddingTop: Constants.smallAmount,
+    paddingBottom: Constants.smallAmount
+  },
+  TrackTitle: {
+    fontSize: Constants.largerAmount,
+    fontWeight: 'bold'
+  },
+  NoResults: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center'
+  },
+  SearchToggle: {
+    paddingLeft: Constants.largeAmount,
+    paddingRight: Constants.superAmount
+  },
+  User: {
+    paddingTop: Constants.largeAmount,
+    paddingBottom: Constants.mediumAmount,
+    paddingLeft: Constants.largeAmount,
+    paddingRight: Constants.largeAmount,
+    flexDirection: 'row'
+  },
+  Username: {
+    textTransform: 'uppercase',
+    fontWeight: 'bold',
+    justifyContent: 'center'
+  },
+  Fullname: {
+    fontSize: 12,
+    color: Colors.SUBTITLE,
+    fontWeight: 'bold'
   }
 });
 
@@ -48,7 +101,15 @@ class Search extends React.Component {
     this.state = {
       searchValue: '',
       loading: false,
-      results: []
+      searchUsers: false,
+      results: [],
+      users: [],
+      dialogVisible: false,
+      dialogContent: {
+        title: '',
+        message: '',
+        content: null
+      }
     }
   }
 
@@ -58,58 +119,166 @@ class Search extends React.Component {
 
   render() {
     return(
-      <View style={[Styles.Search]}>
-        <Text style={[Global.ScreenTitle]}>
-          {Labels.SEARCH}
-        </Text>
-        <Text style={[Global.ScreenSubTitle]}>
-          {Labels.FIND_TRACKS}
-        </Text>
-        <SsInput onClear={() => {
-          this.setState({
-            searchValue: ''
-          });
-        }} style={[{
-          marginTop: Constants.mediumAmount
-        }]} clear={this.state.searchValue !== '' ? true : false} value={this.state.searchValue} search placeholder={Labels.SEARCH} onChange={(value) => {
-          //Make sure we are not loading and that the value that we are searching for is not empty
-          //otherwise this will reutrn and error.
-          if(!this.state.loading && value !== '') {
-            SpotifyRequest(`https://api.spotify.com/v1/search?q=${value}&type=track`).then(data => {
-              this.setState({
-                results: data.tracks.items,
-                loading: false
-              });
-            });
-          }
-
-          this.setState({
-            searchValue: value,
-            loading: true
-          });
-        }}/>
-        {
-          this.state.loading && <View style={[{
+      <BlurView style={[Styles.Search]} tint={'light'} intensity={50}>
+        <View style={[Styles.SearchTop]}>
+          {this._getHeader()}
+        </View>
+        <View style={[{
             flex: 1
           }]}>
-            <SsSpinner/>
-          </View>
-        }
-        <View style={[Styles.SearchContents]}>
-          {
-            (!this.state.loading && this.state.results.length > 0) && <FlatList keyExtractor={(item, index) => item.id} data={this.state.results} renderItem={(item,index) => {
-                return(
-                  <TouchableOpacity style={[Styles.ResultItem,Styles.BorderTop]}>
-                    <Text style={[Styles.ItemTrackTitle]} numberOfLines={1}>{item.item.name}</Text>
-                    <Text numberOfLines={1}>{item.item.album.artists[0].name}</Text>
-                  </TouchableOpacity>
-                )
-              }
-            }/>
-          }
+          {this._getContent()}
         </View>
-      </View>
+      </BlurView>
     );
+  }
+
+  _getHeader() {
+      return(
+        <View style={[{
+          flex: 1,
+          flexDirection: 'row'
+        }]}>
+          <SsInput circle onClear={() => {
+            this.setState({
+              searchValue: '',
+              results: []
+            });
+          }} style={[{
+            marginTop: Constants.mediumAmount,
+            flex: 1
+          }]} clear={this.state.searchValue !== '' ? true : false} value={this.state.searchValue} search placeholder={Labels.SEARCH} onChange={(value) => {
+            //Make sure we are not loading and that the value that we are searching for is not empty
+            //otherwise this will reutrn and error.
+            if(!this.state.loading && !this.state.searchUsers && value !== '') {
+              LastFmSearchTracks('hello').then(response => {
+                return response.json();
+              }).then(data => {
+                this.setState({
+                  results: data,
+                  loading: false
+                });
+              });
+            }
+
+            if(!this.state.loading && this.state.searchUsers && value != '') {
+              GetValue('username').then(username => {
+                GetSecure('password').then(password => {
+                  ApiRequest(username,password,'/users/find',{
+                    username: value
+                  },'POST').then(data => {
+                    if(data.PAYLOAD){
+                      this.setState({
+                        users: data.PAYLOAD,
+                        loading: false
+                      });
+                    }
+                  });
+                });
+              });
+            }
+
+            if(value !== '') {
+              this.setState({
+                searchValue: value,
+                loading: true
+              });
+            } else {
+              this.setState({
+                searchValue: '',
+                loading: false
+              });
+            }
+          }}/>
+          <TouchableOpacity style={[{
+            paddingRight: Constants.mediumAmount,
+            paddingLeft: Constants.mediumAmount,
+            paddingTop: Constants.largeAmount + 1
+          }]} onPress={() => {
+            this.setState({
+              searchUsers: !this.state.searchUsers
+            });
+          }}>
+            <SsSwitch checked={this.state.searchUsers} icon={'user'}/>
+          </TouchableOpacity>
+        </View>
+      )
+  }
+
+  _getContent() {
+    if (this.state.loading) {
+      return(
+        <SsSpinner/>
+      )
+    } else {
+      if(this.state.searchUsers) {
+        if(this.state.users.length > 0) {
+          return(
+            <View>
+              {this._getUsers(this.state.users)}
+            </View>
+          )
+        } else {
+          return(
+            <View style={[{
+
+            }]}>
+              <Text>{JSON.stringify(this.state)}</Text>
+            </View>
+          )
+        }
+      } else {
+        if(this.state.results.length > 0) {
+          return(
+            <View>
+
+            </View>
+          )
+        } else {
+          return(
+            <View>
+              <Text>Tracks</Text>
+            </View>
+          )
+        }
+      }
+    }
+  }
+
+  _getTracks() {
+
+  }
+
+  _getUsers(data) {
+    return(
+      <FlatList data={data} keyExtractor={(key,index) => {return index.toString()}} renderItem={({item,index}) => {
+        return (
+          <View style={[Styles.User,index > 0 && Styles.BorderTop]}>
+            <TouchableOpacity style={[{
+              flexDirection: 'row'
+            }]}>
+              <SsAvatar round name={item.username}/>
+              <View style={[{
+                paddingLeft: Constants.mediumAmount
+              }]}>
+                <Text style={[Styles.Username]}>
+                  {item.username}
+                </Text>
+                <Text style={[Styles.Fullname]}>
+                  {item.firstname} {item.lastname}
+                </Text>
+              </View>
+              <View style={[{
+
+              }]}>
+                <SsButton style={{
+
+                }} small link circle label={'Follow'}/>
+              </View>
+            </TouchableOpacity>
+          </View>
+        )
+      }}/>
+    )
   }
 }
 

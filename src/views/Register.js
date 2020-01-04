@@ -1,5 +1,5 @@
 import React from 'react';
-import { View,Text,StyleSheet,Image,Dimensions } from 'react-native';
+import { View,Text,StyleSheet,Image,Dimensions,Keyboard,KeyboardAvoidingView } from 'react-native';
 import Constants from '../styles/Constants';
 import Colors from '../styles/Colors';
 import Labels from '../styles/Labels';
@@ -27,6 +27,12 @@ const Styles = StyleSheet.create({
   },
   Foot: {
     flex: 0
+  },
+  KeyboardShowing: {
+    flex: .25
+  },
+  KeyboardHiding: {
+    flex: .75
   }
 })
 
@@ -34,21 +40,57 @@ class Register extends React.Component {
   constructor(props) {
     super(props);
 
+    this._keyboardDidShow = this._keyboardDidShow.bind(this);
+    this._keyboardDidHide = this._keyboardDidHide.bind(this);
+
     this.state = {
       username: '',
       password: '',
       repeatPassword: '',
       email: '',
       termsAccepted: false,
-      modalOpen: false
+      modalOpen: false,
+      keyboardShowing: false
     }
+  }
+
+  componentDidMount() {
+    //Add listeners to the keyboard and set the functions that we want to run
+    this.keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      this._keyboardDidShow,
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      this._keyboardDidHide,
+    );
+  }
+
+  componentWillUnmount() {
+    //Remove the keyboard listeners once the login screen is gone.
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+
+  _keyboardDidShow() {
+    this.setState({
+      keyboardShowing: true
+    });
+  }
+
+  _keyboardDidHide() {
+    this.setState({
+      keyboardShowing: false
+    });
   }
 
   render() {
     return(
-      <View style={[Styles.Register]}>
+      <KeyboardAvoidingView style={[Styles.Register]} behavior='padding'>
         {
-          this.state.modalOpen && <SsModal visible={this.state.modalOpen} title={Labels.TERMS_CONDITIONS} onClose={() => {
+          this.state.modalOpen && <SsModal style={[{
+            marginBottom: Constants.largerAmount
+          }]} visible={this.state.modalOpen} title={Labels.TERMS_CONDITIONS} onClose={() => {
             this.setState({
               modalOpen: false
             });
@@ -62,18 +104,20 @@ class Register extends React.Component {
             }}/>
           </SsModal>
         }
-        <View style={[Styles.Header]}>
+        <View style={[this.state.keyboardShowing ? Styles.KeyboardShowing : Styles.KeyboardHiding]}>
 
         </View>
         <View style={[Styles.Form]}>
             <Text style={[{
-              fontSize: Constants.mediumLargeAmount * 2
+              fontSize: Constants.mediumLargeAmount * 2,
+              paddingLeft: Constants.mediumAmount
             }]}>
               {Labels.REGISTER}
             </Text>
             <Text style={[{
               fontSize: Constants.mediumLargeAmount,
-              paddingBottom: Constants.largeAmount
+              paddingBottom: Constants.largeAmount,
+              paddingLeft: Constants.mediumAmount
             }]}>
               {Labels.FILL_OUT}
             </Text>
@@ -120,7 +164,7 @@ class Register extends React.Component {
         <View style={[Styles.Foot]}>
 
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

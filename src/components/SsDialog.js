@@ -30,6 +30,10 @@ class SsDialog extends React.Component {
   //Returns a bunch of different types of dialogs from standard to progress dialogs.
   getDialogType(type) {
     switch(type) {
+      case 'custom':
+        return <ConfirmDialog titleStyle={[Global.AlignTextLeft]} messageStyle={[Global.AlignTextLeft]} visible={this.props.visible} title={this.props.title} message={this.props.message} positiveButton={this.props.positiveButton} negativeButton={this.props.negativeButton}>
+          {this.props.children}
+        </ConfirmDialog>
       case 'confirm':
         return <ConfirmDialog titleStyle={[Global.AlignTextLeft]} messageStyle={[Global.AlignTextLeft]} visible={this.props.visible} title={this.props.title} message={this.props.message} positiveButton={this.props.positiveButton} negativeButton={this.props.negativeButton}/>
       default:
